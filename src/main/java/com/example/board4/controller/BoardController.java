@@ -1,8 +1,10 @@
 package com.example.board4.controller;
 
 import com.example.board4.domain.Board;
+import com.example.board4.domain.Post;
 import com.example.board4.domain.User;
 import com.example.board4.repository.BoardRepository;
+import com.example.board4.repository.PostRepository;
 import com.example.board4.repository.UserRepositroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class BoardController {
     @Autowired
     BoardRepository boardRepository;
 
+    @Autowired
+    PostRepository postRepository;
+
     @GetMapping("/user")
     public ResponseEntity<String> createUser(@RequestBody User user) {
         userRepositroy.createUser(new User(user.getEmail(), user.getName(), user.getDeleted()));
@@ -32,6 +37,13 @@ public class BoardController {
     public ResponseEntity<String> createBoard(@RequestBody Board board) {
         boardRepository.creatBoard(new Board(board.getTitle(), board.getType(), board.getUpdated(), board.getCreated()));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<String> createPost(@RequestBody Post post) {
+        postRepository.createPost(new Post(post.getUserIdx(), post.getBoardIdx(), post.getTitle(), post.getDescription(), post.getDeleted(), post.getUpdated(), post.getCreated()));
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
